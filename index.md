@@ -1,57 +1,54 @@
-## [OpenProject](https://www.openproject.org/) on a [RaspberryPi](https://www.amazon.com/Raspberry-Model-2019-Quad-Bluetooth/dp/B07TC2BK1X/ref=sxin_3_ac_d_pm?ac_md=3-0-VW5kZXIgJDc1-ac_d_pm&cv_ct_cx=raspberry+pi+4+4gb&keywords=raspberry+pi+4+4gb&pd_rd_i=B07TC2BK1X&pd_rd_r=e622118f-8bbf-43e5-ba7b-2da482551e9b&pd_rd_w=30pUf&pd_rd_wg=8t2FQ&pf_rd_p=0e223c60-bcf8-4663-98f3-da892fbd4372&pf_rd_r=8PG76Q9PBRF32SW9MH8G&psc=1&qid=1582422684)-based server 
+## [RaspberryPi](https://amzn.asia/d/ikVpfuX)で[OpenProject](https://www.openproject.org/)を動かす 
 
 
-### Background
+### はじめに
 
+[OpenProject](https://www.openproject.org/)は、完全な機能を備えたオープンソースのプロジェクト管理ツールボックスです。  
+無料のコミュニティ版もリリースされていますが、一部のプレミアム機能は有料のクラウド版とエンタープライズ版に限定されています。  
+セルフホストする場合には4GBのRAMを搭載したLinuxベースのシステムが推奨されており、インストールが容易になる.deb/.rpmパッケージやdockerイメージを提供しています。  
 
-### Introduction
+新しいRaspberry Pi 4はコンパクトで電力効率に優れ、4コアのSoCと4GBのRAMを搭載し、理論上OpenProjectを実行できます。これは小規模なチームやローカルのテスト設備にとって、非常に消費電力の少ない良い方法になり得るでしょう。  
 
-[OpenProject](https://www.openproject.org/) is a fully featured, open source project management toolbox.  
-A free community version has been released, but some premium features are limited to the paid-for cloud & enterprise versions. 
-If you want to run your own server, the project suggests a Linux-based system with 4 GB RAM, and supplies various .deb/.rpm packages, or docker images for easy installation. 
+しかしここで問題が発生します。OpenProjectはARMアーキテクチャをサポートしていないため、.deb/.rpmパッケージやdockerに基づいたインストール方法は利用できません。 
+サポートフォーラムには、何年も前からこの件に関するスレッドがいくつかありますが、明確な解決法はほとんどありません。(このページに辿り着いた方々はすでにご存知かもしれません)
 
-The newer Raspberry Pi 4 boards are compact and power efficient, and with 4 cores & 4 GB of RAM at least on paper look capable of running OpenProject. This would make for a very power-efficient and compact solution for (at least) small teams or local test installations.  
+## 良いニュース: OpenProjectは(非公式に)ARMで実行することができます!
 
-The problem? OpenProject officially does not support the ARM architecture, so any described installation methods based on .deb/.rpm packages or docker fail miserably. The support forum has a few threads on this dating back several years, but little to no help has been forthcoming to to make this happen. But if you found this page, your probably know all about that already. 
+Raspberry PiでOpenProjectを動作させることは可能です!4GBのRAMを搭載したRPi4(または互換ボード)を強くお勧めします。  
+2GBでも十分なスワップ領域があれば何とかなるかもしれませんが、検証されておらず、非推奨です。  
+インストールとコンパイルの過程で、メモリ使用量は最大で約3.1GBになります。  
 
-## Good news: OpenProject runs on ARM (unofficially, at least)!
+## 今すぐ利用したいのですが、既製のシステムイメージはありますか？
 
-It's possible to get OpenProject working on a Raspberry Pi. I highly recommend a RPi4 with 4 GB RAM (or a similar board). It might be possible to get by with the 2 GB version and sufficient swap space, but that would be untested as of now, and seems ill advised. During the installation and compilation process, memory usage maxes out at about 3.1 GB. 
+元の著者が作成したイメージがありますが、2021年のものでありセキュリティ的リスクが多いため推奨されません。  
 
-## I just want to give this a go quickly - is there a ready-made system image?
+ファイルは[ここ](https://drive.google.com/file/d/1qBzWME8BCVja0HickLo_SOcvsUL5sUEC/view?usp=sharing)にあり、ファイルサイズは約12GBで16GB以上のSDカードで利用できます。RPi4が必要で、2GBか4GBのメモリが必要です。SSH は有効になっており(pi//raspberry)、OpenProjectの管理者アカウントはデフォルトのアカウント名とパスワード(admin//admin) のままです。  
+システムに接続するには無線LAN (/etc/wpa-supplicant/wpa-supplicant)かイーサネット二接続する必要があります。OpenProjectでメール通知を設定してください(下記参照)。
 
-I prepared a Raspian lite-based image in Feb 2021, which should get anyone up and running in half an hour, but has some security issues, unless passwords are changes, etc.
+問題や成功報告は本家のリポジトリにお願いします。
 
-The image file is [here](https://drive.google.com/file/d/1qBzWME8BCVja0HickLo_SOcvsUL5sUEC/view?usp=sharing), around 12gb and should fit any 16gb+ memory card. It does require a RPi4, with ideally 2 or 4gb memory. SSH is enabled (pi//raspberry), OpenProject is still on the default login (admin//admin), and you will have to enable wifi (/etc/wpa-supplicant/wpa-supplicant) or ethernet to connect to the system. Then set up email notificatiosns in OpenProject (see below). 
+## ステータス(2021年2月)
 
-I'm curious to hear about any issues or success stories!
+2020年2月にmadewhatnowさんがOpenProject 10のためにこの説明書を作成しました。システム・イメージや様々な修正を求める多数のメールを受け取り、2021年にようやくプロトコルの再検討を行いました。OpenProjectは最近バージョン11をリリース、そして少々驚いたことに、2021ではプロセスがかなりスムーズになっている。RPi 4上のRaspian Liteイメージから始めて、全プロセスは最小限の問題で数時間で完了した。以下のプロトコルは、必要な変更を反映して更新されている。
 
-## Status (Feb 2021)
+OpenProjectフォーラムでは、微調整や修正に関する議論が続いています: https://community.openproject.org/topics/6873
+## 主な課題
 
-I original wrote the instructions in February 2020, for OpenProject 10 - and while they (mostly) worked, they were still somewhat buggy in an unpredictable way. I have received a surprising amount of emails asking for the system image, or various fixes, and finally revisited the protocol in 2021. OpenProject recently released version 11 - and somewhat surprisingly, in 2021 the process is a lot smoother. Starting with a Raspian Lite image on a  RPi 4, the whole process was done in a few hours, with minimal issues. The protocol below is updated to reflect the required changes. 
+* 随時更新
 
-There is an ongoing discussion in the OpenProject forum regarding tweaks and fixes: https://community.openproject.org/topics/6873
-## Key issues
+### OpenprojectをRaspberryPi OSにインストールする方法
 
-* to be populated as discovered
+この手順は[ここ](https://docs.openproject.org/installation-and-operations/installation/manual/)にある手動インストール手順をベースにしています。公式の手順は古くなっており複数の問題がありますが、手順が細かく記載されています。
+## RaspberryPi OSのセットアップ
 
-### How to install Openproject on Raspian
+[RaspberryPi OS Liteのイメージをダウンロード](https://www.raspberrypi.com/software/)し、microSDカードに[書き込み](https://www.balena.io/etcher/)ます(32GBのものを利用していますが、もう少し小さなSDカードでも問題有りません)。
+SSHとローカルWifiネットワークを利用する場合:
 
-This protocol is based on the outdated manual installation protocol that can be found [here](https://docs.openproject.org/installation-and-operations/installation/manual/). By now it has several issues, but it does spend more time explaining the various steps. 
+* 空のSSHファイルを作成し、[SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/)を有効にする(または直接キーボード、マウス、ディスプレイに接続) 
+* [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)ファイルを作成し、ローカル無線LANの認証情報を設定する(またはPiをLANに接続する)。
+* ルーターでIPアドレスを確認し、これを使って好きなSSHクライアント(Puttyなど)でログインします。
 
-## Setting up the Raspberry and Raspian Buster
-
-Download a [Raspian Buster Lite](https://www.raspberrypi.org/downloads/raspbian/) system image and [flash](https://www.balena.io/etcher/) it on a microSD card (I'm using a fast 32 GB one, smaller is fine too).
-
-Assuming that access via SSH & the local wifi network is required:
-
-* Create an empty SSH file to enable [shell access](https://www.raspberrypi.org/documentation/remote-access/ssh/) (or hook up the Pi to a keyboard, mouse & display directly). 
-* Create an [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md) file with the correct credentials for the local wifi (or hook the Pi up to a LA).
-* Check your router for the IP address of the Pi, and use this to log in using your favourite SSH client (Putty, etc)
-
-Raspian standard username // password is: pi // raspberry
-
-Update the system and install necessary system packages, PostgreSQL and the optional memcached package). Installing npm and nodejs here is probably redundant, but it looks like this works. Drop them at your own risk. 
+システムを更新し、必要なシステム・パッケージ、PostgreSQL、オプションのmemcachedパッケージをインストールします。ここでnpmとnodejsをインストールするのも良いかもしれません。
 
 ```
 sudo apt-get update -y
@@ -59,7 +56,7 @@ sudo apt-get full-upgrade -y
 sudo apt-get install -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libgdbm-dev libncurses5-dev automake libtool bison libffi-dev git curl poppler-utils unrtf tesseract-ocr catdoc libxml2 libxml2-dev libxslt1-dev memcached postgresql postgresql-contrib libpq-dev libsass1 libsass-dev sassc npm nodejs
 ```
 
-## Expand filesystem
+## ファイルシステムを拡張する
 Expand the filesystem to take full advantage of the size of SD card chosen;
 Start **raspi-config** and go to **advanced options**, **expand filesystem**.  
 Quit and reboot.
@@ -95,6 +92,7 @@ Check PostgreSQL users and their privileges. If the CREATE DB privilege is missi
 ```
 psql
 \du
+exit
 ```
 The output should look like this:
 
@@ -105,8 +103,6 @@ postgres=# \du
 -------------+------------------------------------------------------------+-----------
  openproject | Superuser, Create role, Create DB                          | {}
  postgres    | Superuser, Create role, Creaboglte DB, Replication, Bypass RLS | {}
- 
- exit
 ```
 
  
@@ -128,9 +124,9 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
 echo 'eval "$(rbenv init -)"' >> ~/.profile
 source ~/.profile
 git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-MAKE_OPTS="-j 4" rbenv install 2.7.2
+MAKE_OPTS="-j 4" rbenv install 3.2.1
 rbenv rehash
-rbenv global 2.7.2
+rbenv global 3.2.1
 
 ```
 This will take 15 minutes. 
@@ -149,10 +145,10 @@ git clone https://github.com/OiNutter/nodenv.git ~/.nodenv
 echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.profile
 echo 'eval "$(nodenv init -)"' >> ~/.profile
 source ~/.profile
-git clone git://github.com/OiNutter/node-build.git ~/.nodenv/plugins/node-build
-MAKE_OPTS="-j 4" nodenv install 13.7.0
+git clone https://github.com/OiNutter/node-build.git ~/.nodenv/plugins/node-build
+MAKE_OPTS="-j 4" nodenv install 16.17.0
 nodenv rehash
-nodenv global 13.7.0
+nodenv global 16.17.0
 ```
 
 This will take 1 minute.  
@@ -163,7 +159,7 @@ Careful - the manual installation I linked to above still uses stable/9, the cur
 
 ```
 cd ~
-git clone https://github.com/opf/openproject.git --branch stable/11--depth 1
+git clone https://github.com/opf/openproject.git --branch stable/12 --depth 1
 cd openproject
 gem update --system 
 gem install bundler
@@ -200,7 +196,7 @@ production:
  
 Create an app password for gmail, and include it in the config file. Make sure to keep the .yml layout intact. 
  ```
-   cp config/configuration.yml.example config/configuration.yml
+ cp config/configuration.yml.example config/configuration.yml
  nano config/configuration.yml
  ```
  ```
@@ -242,10 +238,11 @@ Last one is the slow one - expect to wait for 15 minutes.
 ```
 sudo apt-get install -y apache2 libcurl4-gnutls-dev apache2-dev libapr1-dev libaprutil1-dev
 sudo chmod o+x "/home/openproject"
-sudo su openproject --login
-cd ~/openproject
-gem install passenger
-passenger-install-apache2-module
+sudo apt-get install -y dirmngr gnupg apt-transport-https ca-certificates curl
+curl https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/phusion.gpg >/dev/null
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bullseye main > /etc/apt/sources.list.d/passenger.list'
+sudo apt-get update
+sudo apt-get install -y libapache2-mod-passenger
 ```
 This will, again, take a while - expect 20 minutes. 
 
@@ -269,7 +266,8 @@ In /etc/apache2/mods-available/passenger.conf:
 Then, still as root:
 ```
 sudo a2enmod passenger
-sudo systemctl restart apache2
+sudo a2enmod expires
+sudo apache2ctl restart
 ```
 
 Create the /etc/apache2/sites-available/openproject.conf file:
