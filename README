@@ -1,7 +1,6 @@
 How to install OpenProject (stable/10) on Raspian Buster using a Raspberry Pi 4 (4gb RAM).
+Raspberry Pi 4Bを使って OpenProject (stable/12) を Raspberry Pi OS にインストールする方法。
 
-Find step by step instructions:
+ステップ・バイ・ステップの指示:
 
-https://github.com/madewhatnow/OpenProjectRaspberryPi/blob/master/index.md
-
-https://www.madewhatnow.com/OpenProjectRaspberryPi/
+https://github.com/creeper-0910/OpenProjectRaspberryPi4B/blob/master/index.md

@@ -3,6 +3,8 @@
 
 ### はじめに
 
+これはmadewhatnowさんが作成したRaspberryPi用のOpenProjectインストールガイドの日本語訳です。
+
 [OpenProject](https://www.openproject.org/)は、完全な機能を備えたオープンソースのプロジェクト管理ツールボックスです。  
 無料のコミュニティ版もリリースされていますが、一部のプレミアム機能は有料のクラウド版とエンタープライズ版に限定されています。  
 セルフホストする場合には4GBのRAMを搭載したLinuxベースのシステムが推奨されており、インストールが容易になる.deb/.rpmパッケージやdockerイメージを提供しています。  
@@ -29,7 +31,7 @@ Raspberry PiでOpenProjectを動作させることは可能です!4GBのRAMを�
 
 ## ステータス(2021年2月)
 
-2020年2月にmadewhatnowさんがOpenProject 10のためにこの説明書を作成しました。システム・イメージや様々な修正を求める多数のメールを受け取り、2021年にようやくプロトコルの再検討を行いました。OpenProjectは最近バージョン11をリリース、そして少々驚いたことに、2021ではプロセスがかなりスムーズになっている。RPi 4上のRaspian Liteイメージから始めて、全プロセスは最小限の問題で数時間で完了した。以下のプロトコルは、必要な変更を反映して更新されている。
+2020年2月にmadewhatnowがOpenProject 10のためにこの説明書を作成しました。システム・イメージや様々な修正を求める多数のメールを受け取り、2021年にようやくプロトコルの再検討を行いました。OpenProjectは最近バージョン11をリリース、そして少々驚いたことに、2021ではプロセスがかなりスムーズになっている。RPi 4上のRaspian Liteイメージから始めて、全プロセスは最小限の問題で数時間で完了した。以下のプロトコルは、必要な変更を反映して更新されている。
 
 OpenProjectフォーラムでは、微調整や修正に関する議論が続いています: https://community.openproject.org/topics/6873
 ## 主な課題
@@ -57,44 +59,44 @@ sudo apt-get install -y zlib1g-dev build-essential libssl-dev libreadline-dev li
 ```
 
 ## ファイルシステムを拡張する
-Expand the filesystem to take full advantage of the size of SD card chosen;
-Start **raspi-config** and go to **advanced options**, **expand filesystem**.  
-Quit and reboot.
+SDカードの容量を最大限利用するためにファイルシステムを拡張します;
+**raspi-config**を起動し**advanced options**の**expand filesystem**を選択した後、終了し再起動します。
 
 
-## Increase swap space to 4 GB
-Not actually necessary, but possibly useful for the 2 GB board version (not recommended). Make sure to reverse the setting after the installation to avoid burning out the memory card by excessive read/write cycles.
+## スワップ領域を4GBに拡張する
+基本的には不要ですが、2GB版では役に立つかもしれません(非推奨)。過剰な読み書きによりメモリーカードの破損を避けるため、インストール後は必ず設定を元に戻してください。
 
 ```
 sudo dphys-swapfile swapoff
 sudo nano /etc/dphys-swapfile 
-***find the CONF_SWAPSIZE=100 line and change to 4096 or similar***
+***CONF_SWAPSIZEとCONF_MAXSWAPの行を見つけ、4096またはそれに近い値に変更する***
 sudo dphys-swapfile swapon
 ```
 
-## Set up user accounts
+## ユーザーアカウントのセットアップ
 
-Create the openproject group/user. For the standard installation I set 'openproject' as the password.
+openprojectグループ/ユーザーを作成する。標準インストールでは、ここではパスワードに'openproject'を設定した。
 
 ```
 sudo groupadd openproject
 sudo useradd --create-home --gid openproject openproject
-sudo passwd openproject #(***pick a password***)
+sudo passwd openproject 
+#パスワードを入力
 ```
 
-Switch to the PostgreSQL system user and create the database user. The official documentation creates a user without privileges, the -sd flags will create a superuser with CREATEDB privileges.
+PostgreSQLシステムユーザに切り替えて、データベース用ユーザを作成してください。公式ドキュメントの通り二作成すると権限のないユーザが作成されますが、-sdフラグを指定するとCREATEDB権限を持つスーパーユーザが作成されます。
 
 ```
 sudo su - postgres
 createuser -drsW openproject
 ```
-Check PostgreSQL users and their privileges. If the CREATE DB privilege is missing, the installation will fail at a later point.
+PostgreSQLのユーザとその権限を確認してください。CREATE DB権限がない場合、インストールはその後失敗します。
 ```
 psql
 \du
 exit
 ```
-The output should look like this:
+出力は以下のようになります:
 
 ```
 postgres=# \du
@@ -106,16 +108,16 @@ postgres=# \du
 ```
 
  
- Create the database and revert to the standard 'pi' user account:
+データベースを作成し、元のユーザーアカウントに戻します:
  
  ```
  createdb -O openproject openproject
  exit
  ```
 
-## Preparing software packages
+## ソフトウェアパッケージの準備
 
-Following the manual installation suggestions, rbenv is used to install Ruby. Whenever possible, I use all four cores to speed up compiling (hence the **-j 4** flags). These tasks have to be done as the openproject user, hence the **su -- openproject** command.  
+手動インストールの手順に従って、rbenvを使ってRubyをインストールします。可能な限りコンパイルを高速化するために4つのコアを使います(**-j 4**フラグを使用する)。これらの作業はopenprojectユーザーとして行う必要があるため、**su -- openproject**コマンドを使用します。  
 
 ```
 sudo su -- openproject -login
@@ -129,16 +131,15 @@ rbenv rehash
 rbenv global 3.2.1
 
 ```
-This will take 15 minutes. 
+これには15分ほどかかります。 
 
-Earlier version of the protocol required an older (2.6) version, now 2.7.2 compiles just fine. 
-
-Check version with
+バージョンを確認するには
 ```
 ruby --version
 ```
+を実行します。
 
-Following the manual installation suggestions, nodenv is used to install Ruby. Whenever possible, I use all four cores to speed up compiling (watch out for the **-j 4** flags).
+手動インストールの手順に従って、nodenvを使ってRubyをインストールします。可能な限りコンパイルを高速化するために4つのコアすべてを使う(**-j 4**フラグに注意)。
 
 ```
 git clone https://github.com/OiNutter/nodenv.git ~/.nodenv
@@ -151,11 +152,11 @@ nodenv rehash
 nodenv global 16.17.0
 ```
 
-This will take 1 minute.  
+これには1分ほどかかります。 
 
-## Compile and install OpenProject
+## OpenProjectとコンパイルとインストール
 
-Careful - the manual installation I linked to above still uses stable/9, the current release is stable/11 (as of Feb 2021). So, using release stable/11 here. Earlier issues with bcrypt and other gems appear to have resolved themselves. 
+注意 - 上記リンクのインストール手順ではまだstable/9を使用していますが、現在のリリースはstable/12です(2023年7月現在)。ここではstable/12を使用しています。
 
 ```
 cd ~
@@ -168,16 +169,16 @@ npm install
 npm audit fix
 ```
 
-**gem update --system** will take about 8 minutes.
+**gem update --system** これには8分ほどかかります。 
 
-**bundle install** will take about 5 minutes.
+**bundle install** これには5分ほどかかります。 
 
-**npm install** will take  15 minutes.
+**npm install** これには15分ほどかかります。 
 
 
-## Prepare config files
+## 設定ファイルの準備
 
-### Database:
+### データベース:
 ```
 cp config/database.yml.example config/database.yml
 nano config/database.yml
@@ -189,12 +190,12 @@ production:
   database: openproject
   pool: 20
   username: openproject
-  password: openproject
+  password: <パスワード>
 ```
   
-### Email & memcache:
+### メールとmemcache:
  
-Create an app password for gmail, and include it in the config file. Make sure to keep the .yml layout intact. 
+gmail用のアプリパスワードを作成し、設定ファイルに含めます。.ymlのレイアウトはそのままにしてください。
  ```
  cp config/configuration.yml.example config/configuration.yml
  nano config/configuration.yml
@@ -209,15 +210,15 @@ production:
   smtp_enable_starttls_auto: true
   smtp_authentication: plain
   
-** Add at the end of the file:**
+** ファイル末尾に追加する:**
  
  rails_cache_store: :memcache
  ```
 
 
   
-## Setup OpenProject
-Set secret key and store in environmental variable SECRET_KEY_BASE. 
+## OpenProjectのセットアップ
+秘密鍵を設定し、環境変数 SECRET_KEY_BASE に格納してください。
 
 ```
 su -- openproject -login
@@ -230,10 +231,9 @@ RAILS_ENV="production" ./bin/rake db:seed
 RAILS_ENV="production" ./bin/rake assets:precompile
 exit
 ```
-Last one is the slow one - expect to wait for 15 minutes. 
+最後の処理は遅く、最低でも15分ほどかかります。
 
-
-## Install Apache & Passenger
+## ApacheとPassengerをインストール
 
 ```
 sudo apt-get install -y apache2 libcurl4-gnutls-dev apache2-dev libapr1-dev libaprutil1-dev
@@ -244,70 +244,42 @@ sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bul
 sudo apt-get update
 sudo apt-get install -y libapache2-mod-passenger
 ```
-This will, again, take a while - expect 20 minutes. 
+これにも20分ほどかかります。
 
-Once passenger is nearly done it lists the config information for Apache2. Open a second shell as root (or copy the lines into a text editor) and perform the edits as given. Use the information below as a guideline, the actual ones are likely to be different! Raspian uses a split Apache2 configuration, where information is spread out in several files (and not centralized in /etc/apache.conf)
-Install passenger for 'ruby', when asked. 
-
-In  /etc/apache2/mods-available/passenger.load:
-```
-LoadModule passenger_module /home/openproject/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0/gems/passenger-6.0.4/buildout/apache2/mod_passenger.so
-```
-
-In /etc/apache2/mods-available/passenger.conf:
-```
-<IfModule mod_passenger.c>
-     PassengerRoot /home/openproject/.rbenv/versions/2.6.3/lib/ruby/gems/2.6.0/gems/passenger-6.0.4
-     PassengerDefaultRuby /home/openproject/.rbenv/versions/2.6.3/bin/ruby
-</IfModule>
-
-```
-
-Then, still as root:
+続けて、ルートで実行します:
 ```
 sudo a2enmod passenger
 sudo a2enmod expires
 sudo apache2ctl restart
 ```
 
-Create the /etc/apache2/sites-available/openproject.conf file:
+/etc/apache2/sites-available/openproject.conf を作成します:
 ```
 <VirtualHost *:80>
    ServerName yourdomain.com
-   # !!! Be sure to point DocumentRoot to 'public'!
+   # !!! DocumentRoot を 'public' に指定してください!
    DocumentRoot /home/openproject/openproject/public
    <Directory /home/openproject/openproject/public>
-      # This relaxes Apache security settings.
+      # これにより、Apacheのセキュリティ設定が緩和されます。
       AllowOverride all
-      # MultiViews must be turned off.
+      # マルチビューはオフにする必要があります。
       Options -MultiViews
-      # Uncomment this if you're on Apache >= 2.4:
+      # Apache >= 2.4を使用している場合は、コメントアウトを解除してください:
       Require all granted
    </Directory>
 
-   # Request browser to cache assets
+   # ブラウザにアセットのキャッシュを要求する
    <Location /assets/>
      ExpiresActive On ExpiresDefault "access plus 1 year"
    </Location>
 
 </VirtualHost>
-```
- 
-Edit the /etc/apache2/apache2.conf file:
 
-```
-<Directory /home/openproject/>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-        Allow from all
-</Directory>
+PassengerDisableAnonymousTelemetry on
 ```
 
-This might create some security risks, but is required as long as the openproject folder lives in /home/openproject instead of the /var/www/ folders. 
 
-
-Reboot or restart the apache service again: 
+apacheサービスを再起動する: 
 
 ```
 sudo systemctl restart apache2
@@ -315,86 +287,87 @@ sudo systemctl restart apache2
 
 
 And now: OpenProject should be accessible on **raspberry_pi-IP**:80. The standard login is admin // admin. If this does not work, see **Troubleshooting** below. 
+OpenProjectは**raspberry_pi-IP**:80でアクセスできるはずです。デフォルトのログインは admin // admin です。これがうまくいかない場合は、以下の **トラブルシューティング** を参照してください。
 
-## Email notifications
+## メール通知
 
-The template configuration above works, if an 'app specific password' is created in the corresponding google account, and the POP/IMAP option is activated for the same account. See details here: https://support.google.com/accounts/answer/185833?hl=en
+上記のテンプレートは、対応するgoogleアカウントに「アプリ固有のパスワード」が作成され、同じアカウントでPOP/IMAPオプションが有効になっている場合に機能します。詳細はこちら: https://support.google.com/accounts/answer/185833?hl=en
 
-## Congratulations!
+## おめでとうございます！
 
 
-For email notification to work well, background jobs have to be enabled. This is untested. 
+電子メール通知を機能させるために、バックグラウンドジョブを有効にしてください。これは検証されていません。
 
-Switch back to the user openproject, and edit crontab:
+ユーザーopenprojectに戻り、crontabを編集する:
 
 ```
 sudo su --openproject -login
-crontab -e **select the editor of choice if required**
+crontab -e 
+**必要な場合はエディタを選択**
 ```
 
 Insert the following line at the end of the file, make sure to use the correct Ruby version:
 
 ```
-*/1 * * * * cd /home/openproject/openproject; /home/openproject/.rvm/gems/ruby-2.6.3/wrappers/rake jobs:workoff
+*/1 * * * * cd /home/openproject/openproject; /home/openproject/openproject/bin/rake jobs:workoff
 ```
 
-Save & reboot. Enjoy. 
+保存して再起動すれば完了です!
 
-## Final Thoughts
+## 結論
 
-Given the limited experience of how well this works, and if it will survive future development and updates, think carefully about whether you want to use this installation for anything other than a hobby, home or testing environment. OpenProject might feel inspired to make ARM a supported architecture in the future (clearly, it shouldn't be too much of a problem!). 
+これがどの程度うまく機能するか、また将来の開発やアップデートに耐えられるかどうかについては、限られた経験しかないため、趣味や家庭、テスト環境以外でこの方法を利用するかどうか、慎重に考えてください。
+OpenProjectは、将来ARMをサポート対象にするかもしれません（はっきり言って、サポートするのにそれほど問題はないはずです！）。
 
-And obviously, if you plan to make this installation available on any sort of network, change the various passwords and user accounts, and shore up security on Raspian!
+当たり前ですがこの手順を利用する場合には、パスワードや管理者アカウントを変更し、Raspberry Piのセキュリティを強化してください!
 
-
-## Troubleshooting
+## トラブルシューティング
 
 2020/02/25
 2020/02/26
 2020/05/05
 
-### I made it through the process, the openproject login page shows up, but I cannot use the admin // admin login. 
-
-You might have missed an error that triggered during the **RAILS_ENV="production" ./bin/rake db:seed** step. When the WorkPackages section is executed, a **getaddrinfo** error is triggered, and **rake aborted** is displayed. 
-This can be easily fixed by executing the following commands as a superuser (e.g. from the pi account), to make sure that /etc/hosts and /etc/resolv.conf can be read by all users. This doesn't seem to reliably fix the problem - removed from the above instructions. 2020/02/26 
+### openprojectのログインページは表示されるのですが、admin // admin loginが利用できません
+**RAILS_ENV="production" ./bin/rake db:seed** ステップ中に発生したエラーを見逃しているかもしれません。WorkPackages セクションを実行すると、**getaddrinfo** エラーが発生し、**rake aborted** と表示されます。
+この問題は、スーパーユーザーとして以下のコマンドを実行し、/etc/hostsと/etc/resolv.confをすべてのユーザーが読めるようにすることで簡単に解決できます。これは確実に問題を解決するものではないようです。2020/02/26 
 
 ```
 sudo chmod o+r /etc/resolv.conf
 sudo chmod o+r /etc/hosts
 ```
-### I still cannot login with admin // admin
+### admin // adminでログインできません
 
-You can manually change the password for the admin account by opening an IRB terminal. This is generally useful if a user forgot their password, and outlined originally [here](https://community.openproject.com/topics/6584).
+IRBターミナルを開いて、管理者アカウントのパスワードを手動で変更することができる。これは一般的に、ユーザーがパスワードを忘れた場合に便利です。概要は[こちら](https://community.openproject.com/topics/6584)。
 
-As the openproject user, open an IRB shell:
+openprojectユーザーとして、IRBシェルを開く:
 
 ```
 cd ~/openproject
 RAILS_ENV=production bundle exec rails c
 ```
-Once the console is open, type out the following:
+コンソールを開いたら、次のように入力します:
 ```
 admin = User.find_by(login: 'admin')
-admin.password = 'RaspberryPi' # Must confirm to the password rules you defined!
+admin.password = 'RaspberryPi' # 定義したパスワードのルールに従うこと！
 admin.password_confirmation = 'RaspberryPi'
 
-admin.save! # Watch the output for errors
+admin.save! # エラーの出力を確認する
 ```
-The final command should return 'true'. Use the new password to login.
+最後のコマンドは「true」を返すはずです。新しいパスワードを使ってログインしてください。
 
-### Error page when accessing the login page & error message the error log:
+### ログインページへアクセスした時のエラーページとエラーメッセージ:
 "Could not spawn process for application /home/openproject/openproject: A timeout occurred while starting a preloader process."
 
-Discovered, solved & reported by Matteo Nespoli (thanks!): Add "PassengerStartTimeout 200" line to passenger.conf, as outlined here: https://community.bitnami.com/t/openproject-8-3-2-0-stack-not-working-after-fresh-install/67444/12
+Matteo Nespoli氏により発見、解決されました (ありがとうございます！): passenger.confに"PassengerStartTimeout 200"を追加します: https://community.bitnami.com/t/openproject-8-3-2-0-stack-not-working-after-fresh-install/67444/12
 
-### Test emails work, but notifications don't arrive
+### テストメールは機能するが、通知が届かない
 
-Background jobs are probably not activated, follow these steps: 
+バックグラウンドジョブが有効になっていない可能性があります: 
 
 https://docs.openproject.org/installation-and-operations/installation/manual/
 
-### More questions?
+### 他に質問は？
 
-Email or ask here: https://community.openproject.com/topics/6873
+メールまたはこちらまでお問い合わせください: https://community.openproject.com/topics/6873
 
 
