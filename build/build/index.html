@@ -1,0 +1,786 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../dependence/">
+      
+      
+        <link rel="next" href="../../troubleshooting/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+    
+    
+      
+        <title>Build - OpenProject on RPi Install Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.26e3688c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#preparing-software-packages" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="OpenProject on RPi Install Documentation" class="md-header__button md-logo" aria-label="OpenProject on RPi Install Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OpenProject on RPi Install Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Build
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <div class="md-header__option">
+        <div class="md-select">
+          
+          <button class="md-header__button md-icon" aria-label="Select language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+          </button>
+          <div class="md-select__inner">
+            <ul class="md-select__list">
+              
+                <li class="md-select__item">
+                  <a href="./" hreflang="en" class="md-select__link">
+                    English
+                  </a>
+                </li>
+              
+                <li class="md-select__item">
+                  <a href="../../ja/build/build/" hreflang="ja" class="md-select__link">
+                    日本語
+                  </a>
+                </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/creeper-0910/OpenProjectRaspberryPi4B" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="OpenProject on RPi Install Documentation" class="md-nav__button md-logo" aria-label="OpenProject on RPi Install Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    OpenProject on RPi Install Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/creeper-0910/OpenProjectRaspberryPi4B" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../..">Introduction</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Introduction
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../">Build</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Build
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dependence/" class="md-nav__link">
+        Dependence
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Build
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Build
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-software-packages" class="md-nav__link">
+    Preparing software packages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compile-and-install-openproject" class="md-nav__link">
+    Compile and install OpenProject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-config-files" class="md-nav__link">
+    Prepare config files
+  </a>
+  
+    <nav class="md-nav" aria-label="Prepare config files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    Database:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#email-memcache" class="md-nav__link">
+    Email &amp; memcache:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-openproject" class="md-nav__link">
+    Setup OpenProject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-apache-passenger" class="md-nav__link">
+    Install Apache &amp; Passenger
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#email-notifications" class="md-nav__link">
+    Email notifications
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#congratulations" class="md-nav__link">
+    Congratulations!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-thoughts" class="md-nav__link">
+    Final Thoughts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../troubleshooting/">Troubleshooting</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Troubleshooting
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#preparing-software-packages" class="md-nav__link">
+    Preparing software packages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compile-and-install-openproject" class="md-nav__link">
+    Compile and install OpenProject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-config-files" class="md-nav__link">
+    Prepare config files
+  </a>
+  
+    <nav class="md-nav" aria-label="Prepare config files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database" class="md-nav__link">
+    Database:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#email-memcache" class="md-nav__link">
+    Email &amp; memcache:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-openproject" class="md-nav__link">
+    Setup OpenProject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-apache-passenger" class="md-nav__link">
+    Install Apache &amp; Passenger
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#email-notifications" class="md-nav__link">
+    Email notifications
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#congratulations" class="md-nav__link">
+    Congratulations!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-thoughts" class="md-nav__link">
+    Final Thoughts
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Build</h1>
+
+<h2 id="preparing-software-packages">Preparing software packages</h2>
+<p>Following the manual installation suggestions, rbenv is used to install Ruby. Whenever possible, I use all four cores to speed up compiling (hence the <strong>-j 4</strong> flags). These tasks have to be done as the openproject user, hence the <strong>su -- openproject</strong> command.  </p>
+<pre><code>sudo su -- openproject -login
+git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+echo 'export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;' &gt;&gt; ~/.profile
+echo 'eval &quot;$(rbenv init -)&quot;' &gt;&gt; ~/.profile
+source ~/.profile
+git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+MAKE_OPTS=&quot;-j 4&quot; rbenv install 2.7.2
+rbenv rehash
+rbenv global 2.7.2
+
+</code></pre>
+<p>This will take 15 minutes. </p>
+<p>Earlier version of the protocol required an older (2.6) version, now 2.7.2 compiles just fine. </p>
+<p>Check version with</p>
+<pre><code>ruby --version
+</code></pre>
+<p>Following the manual installation suggestions, nodenv is used to install Ruby. Whenever possible, I use all four cores to speed up compiling (watch out for the <strong>-j 4</strong> flags).</p>
+<pre><code>git clone https://github.com/OiNutter/nodenv.git ~/.nodenv
+echo 'export PATH=&quot;$HOME/.nodenv/bin:$PATH&quot;' &gt;&gt; ~/.profile
+echo 'eval &quot;$(nodenv init -)&quot;' &gt;&gt; ~/.profile
+source ~/.profile
+git clone git://github.com/OiNutter/node-build.git ~/.nodenv/plugins/node-build
+MAKE_OPTS=&quot;-j 4&quot; nodenv install 13.7.0
+nodenv rehash
+nodenv global 13.7.0
+</code></pre>
+<p>This will take 1 minute.  </p>
+<h2 id="compile-and-install-openproject">Compile and install OpenProject</h2>
+<p>Careful - the manual installation I linked to above still uses stable/9, the current release is stable/11 (as of Feb 2021). So, using release stable/11 here. Earlier issues with bcrypt and other gems appear to have resolved themselves. </p>
+<pre><code>cd ~
+git clone https://github.com/opf/openproject.git --branch stable/11--depth 1
+cd openproject
+gem update --system 
+gem install bundler
+bundle install --deployment --without mysql2 sqlite development test therubyracer docker 
+npm install
+npm audit fix
+</code></pre>
+<p><strong>gem update --system</strong> will take about 8 minutes.</p>
+<p><strong>bundle install</strong> will take about 5 minutes.</p>
+<p><strong>npm install</strong> will take  15 minutes.</p>
+<h2 id="prepare-config-files">Prepare config files</h2>
+<h3 id="database">Database:</h3>
+<pre><code>cp config/database.yml.example config/database.yml
+nano config/database.yml
+</code></pre>
+<pre><code>production:
+  adapter: postgresql
+  encoding: unicode
+  database: openproject
+  pool: 20
+  username: openproject
+  password: openproject
+</code></pre>
+<h3 id="email-memcache">Email &amp; memcache:</h3>
+<p>Create an app password for gmail, and include it in the config file. Make sure to keep the .yml layout intact. </p>
+<pre><code>   cp config/configuration.yml.example config/configuration.yml
+ nano config/configuration.yml
+</code></pre>
+<pre><code>production:                          
+  smtp_address: smtp.gmail.com
+  smtp_port: 587
+  smtp_domain: smtp.gmail.com
+  smtp_user_name: **@gmail.com**
+  smtp_password: **enter gsuite app password here**
+  smtp_enable_starttls_auto: true
+  smtp_authentication: plain
+
+** Add at the end of the file:**
+
+ rails_cache_store: :memcache
+</code></pre>
+<h2 id="setup-openproject">Setup OpenProject</h2>
+<p>Set secret key and store in environmental variable SECRET_KEY_BASE. </p>
+<pre><code>su -- openproject -login
+cd ~/openproject
+echo &quot;export SECRET_KEY_BASE=$(./bin/rake secret)&quot; &gt;&gt; ~/.profile
+source ~/.profile
+RAILS_ENV=&quot;production&quot; ./bin/rake db:create
+RAILS_ENV=&quot;production&quot; ./bin/rake db:migrate
+RAILS_ENV=&quot;production&quot; ./bin/rake db:seed
+RAILS_ENV=&quot;production&quot; ./bin/rake assets:precompile
+exit
+</code></pre>
+<p>Last one is the slow one - expect to wait for 15 minutes. </p>
+<h2 id="install-apache-passenger">Install Apache &amp; Passenger</h2>
+<pre><code>sudo apt-get install -y apache2 libcurl4-gnutls-dev apache2-dev libapr1-dev libaprutil1-dev
+sudo chmod o+x &quot;/home/openproject&quot;
+sudo apt-get install -y dirmngr gnupg apt-transport-https ca-certificates curl
+curl https://oss-binaries.phusionpassenger.com/auto-software-signing-gpg-key.txt | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/phusion.gpg &gt;/dev/null
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bullseye main &gt; /etc/apt/sources.list.d/passenger.list'
+sudo apt-get update
+sudo apt-get install -y libapache2-mod-passenger
+</code></pre>
+<p>This will take about 5 minutes.</p>
+<p>Then, still as root:</p>
+<pre><code>sudo a2enmod passenger
+sudo systemctl restart apache2
+</code></pre>
+<p>Create the /etc/apache2/sites-available/openproject.conf file:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+   ServerName yourdomain.com
+   # !!! Be sure to point DocumentRoot to 'public'!
+   DocumentRoot /home/openproject/openproject/public
+   &lt;Directory /home/openproject/openproject/public&gt;
+      # This relaxes Apache security settings.
+      AllowOverride all
+      # MultiViews must be turned off.
+      Options -MultiViews
+      # Uncomment this if you're on Apache &gt;= 2.4:
+      Require all granted
+   &lt;/Directory&gt;
+
+   # Request browser to cache assets
+   &lt;Location /assets/&gt;
+     ExpiresActive On ExpiresDefault &quot;access plus 1 year&quot;
+   &lt;/Location&gt;
+
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Reboot or restart the apache service again: </p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<p>And now: OpenProject should be accessible on <strong>raspberry_pi-IP</strong>:80. The standard login is admin // admin. If this does not work, see <strong>Troubleshooting</strong> below. </p>
+<h2 id="email-notifications">Email notifications</h2>
+<p>The template configuration above works, if an 'app specific password' is created in the corresponding google account, and the POP/IMAP option is activated for the same account. See details here: https://support.google.com/accounts/answer/185833?hl=en</p>
+<h2 id="congratulations">Congratulations!</h2>
+<p>For email notification to work well, background jobs have to be enabled. This is untested. </p>
+<p>Switch back to the user openproject, and edit crontab:</p>
+<pre><code>sudo su -- openproject -login
+crontab -e **select the editor of choice if required**
+</code></pre>
+<p>Insert the following line at the end of the file, make sure to use the correct Ruby version:</p>
+<pre><code>*/1 * * * * cd /home/openproject/openproject; . ~/.profile; RAILS_ENV=&quot;production&quot; ./bin/rake jobs:workoff
+</code></pre>
+<p>In Rails 6 or later, "config.cache_classes" must be set to false:</p>
+<pre><code>nano /home/openproject/openproject/environments/production.rb
+***Find the line config.cache_classes=true and change it to false***
+</code></pre>
+<p>Save &amp; reboot. Enjoy. </p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>Given the limited experience of how well this works, and if it will survive future development and updates, think carefully about whether you want to use this installation for anything other than a hobby, home or testing environment. OpenProject might feel inspired to make ARM a supported architecture in the future (clearly, it shouldn't be too much of a problem!). </p>
+<p>And obviously, if you plan to make this installation available on any sort of network, change the various passwords and user accounts, and shore up security on Raspian!</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.expand"], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
