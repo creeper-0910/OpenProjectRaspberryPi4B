@@ -181,7 +181,7 @@ For email notification to work well, background jobs have to be enabled. This is
 Switch back to the user openproject, and edit crontab:
 
 ```
-sudo su --openproject -login
+sudo su -- openproject -login
 crontab -e **select the editor of choice if required**
 ```
 
@@ -189,6 +189,12 @@ Insert the following line at the end of the file, make sure to use the correct R
 
 ```
 */1 * * * * cd /home/openproject/openproject; RAILS_ENV="production" ./bin/rake jobs:workoff
+```
+In Rails 6 or later, "config.cache_classes" must be set to false:
+
+```
+nano /home/openproject/openproject/environments/production.rb
+***Find the line config.cache_classes=true and change it to false***
 ```
 
 Save & reboot. Enjoy. 

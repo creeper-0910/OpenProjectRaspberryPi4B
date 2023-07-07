@@ -178,12 +178,12 @@ OpenProjectは**raspberry_pi-IP**:80でアクセスできるはずです。デ�
 ## おめでとうございます！
 
 
-電子メール通知を機能させるために、バックグラウンドジョブを有効にしてください。これは検証されていません。
+電子メール通知を機能させるために、バックグラウンドジョブを有効にしてください。
 
 ユーザーopenprojectに戻り、crontabを編集する:
 
 ```
-sudo su --openproject -login
+sudo su -- openproject -login
 crontab -e 
 **必要な場合はエディタを選択**
 ```
@@ -192,6 +192,12 @@ crontab -e
 
 ```
 */1 * * * * cd /home/openproject/openproject; RAILS_ENV="production" ./bin/rake jobs:workoff
+```
+Rails 6以降では"config.cache_classes"をfalseに設定する必要があります:
+
+```
+nano /home/openproject/openproject/environments/production.rb
+***config.cache_classes=trueの行を見つけ、falseに変更する***
 ```
 
 保存して再起動すれば完了です!
