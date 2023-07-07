@@ -188,7 +188,7 @@ crontab -e **select the editor of choice if required**
 Insert the following line at the end of the file, make sure to use the correct Ruby version:
 
 ```
-*/1 * * * * cd /home/openproject/openproject; RAILS_ENV="production" ./bin/rake jobs:workoff
+*/1 * * * * cd /home/openproject/openproject; . ~/.profile; RAILS_ENV="production" ./bin/rake jobs:workoff
 ```
 In Rails 6 or later, "config.cache_classes" must be set to false:
 

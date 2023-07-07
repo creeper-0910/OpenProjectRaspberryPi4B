@@ -191,7 +191,7 @@ crontab -e
 ファイルの末尾に以下の行を挿入し、Rubyのバージョンが正しいことを確認します:
 
 ```
-*/1 * * * * cd /home/openproject/openproject; RAILS_ENV="production" ./bin/rake jobs:workoff
+*/1 * * * * cd /home/openproject/openproject; . ~/.profile; RAILS_ENV="production" ./bin/rake jobs:workoff
 ```
 Rails 6以降では"config.cache_classes"をfalseに設定する必要があります:
 
