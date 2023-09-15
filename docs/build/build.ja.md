@@ -165,6 +165,7 @@ PassengerDisableAnonymousTelemetry on
 apacheサービスを再起動する: 
 
 ```
+sudo a2ensite openproject
 sudo systemctl restart apache2
 ```
 
