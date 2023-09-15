@@ -163,6 +163,7 @@ Create the /etc/apache2/sites-available/openproject.conf file:
 Reboot or restart the apache service again: 
 
 ```
+sudo a2ensite openproject
 sudo systemctl restart apache2
 ```
 
